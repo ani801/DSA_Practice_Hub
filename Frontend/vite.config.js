@@ -2,15 +2,12 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
 // https://vite.dev/config/
+// vite.config.js
 export default defineConfig({
-  plugins: [react()],
+  // ...other settings
   server: {
-  proxy: {
-    "/api": {
-      target: "https://dsa-practice-hub-1.onrender.com",
-      
-    },
+    host: true, // allow access from external sources
+    allowedHosts: ['dsa-practice-hub-frontend.onrender.com'],
   },
-},
+});
 
-})
