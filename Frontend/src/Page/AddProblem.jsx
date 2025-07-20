@@ -4,6 +4,8 @@ import axios from "axios";
 import { Url } from "../App";
 import PracticeContext from "../context/PracticeContext";
 import Navbar from "../Components/Navbar";
+import React from 'react';
+
   
 export default function AddProblem() {
   const {topics,problems,setTrigger} = useContext(PracticeContext);
