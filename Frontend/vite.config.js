@@ -7,7 +7,7 @@ export default defineConfig({
   // ...other settings
   server: {
     host: true, // allow access from external sources
-    allowedHosts: ['dsa-practice-hub-frontend.onrender.com'],
+    allowedHosts: ['https://dsa-practice-hub-frontend-0i71.onrender.com'],
   },
 });
 
