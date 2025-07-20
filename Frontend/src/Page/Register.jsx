@@ -3,6 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { Url } from "../App";
 import axios from "axios";
 import { toast } from "react-toastify";
+import React from 'react';
+
 
 export default function Register() {
   useEffect(() => {
