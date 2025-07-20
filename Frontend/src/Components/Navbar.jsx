@@ -82,13 +82,13 @@ const handleProfileClick = () => {
             </button>
             {dropdownOpen && (
               <div className="absolute right-0 mt-2 w-40 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
-                <button onClick={handleProfileClick} className="w-full text-left px-4 py-2 flex items-center space-x-2 text-gray-700 hover:bg-orange-100">
+                <button onClick={handleProfileClick} className="w-full text-left px-4 py-2 flex items-center space-x-2 text-gray-700 hover:bg-purple-100">
                   <FaUserCircle />
                   <span>{username}</span>
                 </button>
                 <button
                   onClick={handleLogout}
-                  className="w-full text-left px-4 py-2 flex items-center space-x-2 text-red-500 hover:bg-orange-100"
+                  className="w-full text-left px-4 py-2 flex items-center space-x-2 text-red-500 hover:bg-purple-100"
                 >
                   <FaSignOutAlt />
                   <span>Logout</span>
