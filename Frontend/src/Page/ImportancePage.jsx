@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import Navbar from "../Components/Navbar"; // Adjust path based on your folder structure
+import React from 'react';
 
 
 export default function ImportancePage() {
