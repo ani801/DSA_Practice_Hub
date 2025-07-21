@@ -5,7 +5,7 @@ export default defineConfig({
   plugins: [react()],
   server: {
     host: '0.0.0.0',
-    allowedHosts: ['dsa-practice-hub-frontend.onrender.com'],
+    allowedHosts: ['https://dsa-practice-hub-frontend-0i71.onrender.com'],
   },
   build: {
     outDir: 'dist',
