@@ -3,4 +3,11 @@ import react from '@vitejs/plugin-react'
 
 export default defineConfig({
   plugins: [react()],
+  server: {
+    host: '0.0.0.0',
+    allowedHosts: ['dsa-practice-hub-frontend.onrender.com'],
+  },
+  build: {
+    outDir: 'dist',
+  },
 })
