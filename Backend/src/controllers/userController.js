@@ -80,10 +80,12 @@ const userLogin = async (req, res) => {
         const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '3h' });
         //make a cookie with the token
         res.cookie('token', token, {
-            httpOnly: true,
-            secure:false,// process.env.NODE_ENV === 'production', // Use secure cookies in production
-            maxAge: 3 * 60 * 60 * 1000 // 3 hours
-        });
+  httpOnly: true,
+  secure: true,
+  sameSite: 'None',
+  maxAge: 3 * 60 * 60 * 1000
+});
+
 
         res.status(200).json({
             success: true,
