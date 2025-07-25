@@ -28,7 +28,7 @@ function App() {
         <Route path='/add-problem' element={<AddProblem/>} />
         <Route path='/importance' element={<ImportancePage/>} />
         <Route path="/profile" element={<ProfilePage />} />
-        <Route path="/add-problem-guide" element={<AddProblemGuide />} />
+        <Route path="/problem-guide" element={<AddProblemGuide />} />
 
         {/* Add more routes as needed */}
        
