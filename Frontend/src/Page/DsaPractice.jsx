@@ -277,7 +277,7 @@ export default function DsaPractice() {
     <div className="flex items-center gap-2 px-3 py-2 bg-indigo-50 border border-orange-200 rounded-md hover:bg-orange-100 transition duration-150">
       <span className="text-indigo-600 text-xl">📘</span>
       <Link
-        to="/add-problem-guide"
+        to="/problem-guide"
         className="text-sm font-medium text-indigo-800 hover:underline"
       >
         View Step-by-step Guide
