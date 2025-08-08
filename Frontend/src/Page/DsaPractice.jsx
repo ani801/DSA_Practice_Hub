@@ -4,10 +4,12 @@ import Navbar from "../Components/Navbar";
 import PracticeContext from "../context/PracticeContext";
 import CustomCalendar from "../Components/Calender";
 import ConfirmPopup from "../Components/ConfirmPopup";
+import ProblemNote from "../Components/ProblemNote";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { Url } from "../App";
 import dayjs from "dayjs";
+import PageSegment from "../Components/PageSegment";
 
 const difficultyColors = {
   Easy: "text-green-600 border-green-300",
@@ -18,6 +20,7 @@ const difficultyColors = {
 export default function DsaPractice() {
   const { problems, topics, isAuthenticated, setTrigger, potdProblem } = useContext(PracticeContext);
   const [selectedTopic, setSelectedTopic] = useState("All Topics");
+  // console.log("problems ",problems);
   // const todayStr = new Date().toISOString().slice(0, 10);
 
   const [time, setTime] = useState(getFormattedTime());
@@ -34,6 +37,8 @@ export default function DsaPractice() {
   const [showPopup, setShowPopup] = useState(false);
   const [showPopup2, setShowPopup2] = useState(false);
   const [toBeModified, setToBeModified] = useState(null);
+  const [showSecond, setShowSecond] = useState(false);
+  const [selectedProblem, setSelectedProblem] = useState(null);
 
   const handleCheckboxClick = (e, problemId) => {
     e.preventDefault();
@@ -45,13 +50,11 @@ export default function DsaPractice() {
       setCheckedMap((prev) => ({ ...prev, [problemId]: false }));
     }
   };
-
   const handleDeleteProblem = (problemId) => {
     setShowPopup2(true);
     setToBeModified(problemId);
   };
-
-  const handleConfirm = async () => {
+  const handleConfirm = async() => {
     try {
       // Step 1: Mark as solved (common logic for all problems)
       const markResponse = await axios.post(`${Url}/api/dsa/update/${toBeModified}`, {}, {
@@ -61,7 +64,6 @@ export default function DsaPractice() {
       if (!markResponse.data.success) {
         throw new Error("Failed to mark problem as solved");
       }
-  
       // Step 2: Update checkbox and state
       setCheckedMap((prev) => ({ ...prev, [toBeModified]: true }));
       setTrigger(Date.now());
@@ -74,7 +76,6 @@ export default function DsaPractice() {
           const potdResponse = await axios.post(`${Url}/api/potd/add/${todayStr}`, {}, {
             withCredentials: true,
           });
-  
           if (potdResponse.data.success) {
             toast.success("✅ Today's POTD marked as solved!");
           } else {
@@ -102,11 +103,10 @@ export default function DsaPractice() {
     }
   };
   
-
   const handleCancel = () => {
     setShowPopup(false);
     setPendingCheck(false);
-    setToBeModified(null)
+    setToBeModified(null);
   };
 
   const handleConfirmForDelete = async () => {
@@ -122,6 +122,7 @@ export default function DsaPractice() {
       }
     } catch (error) {
       console.log("error", error);
+      toast.error("Failed to delete problem.");
     }
   };
 
@@ -136,9 +137,9 @@ export default function DsaPractice() {
     end.setHours(23, 59, 59, 999);
     const diff = end - now;
     return {
-      hours: Math.floor(diff / (1000 * 60 * 60)),
-      minutes: Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60)),
-      seconds: Math.floor((diff % (1000 * 60)) / 1000),
+      hours:Math.floor(diff / (1000 * 60 * 60)),
+      minutes:Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60)),
+      seconds:Math.floor((diff % (1000 * 60)) / 1000),
     };
   }
 
@@ -161,11 +162,20 @@ export default function DsaPractice() {
     return problems.filter((p) => p.tags.includes(selectedTopic));
   }, [selectedTopic, problems]);
 
-  if (!isAuthenticated) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-100">
+
+
+if (!isAuthenticated) {
+  return (
+    <div className="min-h-screen bg-gray-100">
+      {/* === Navbar at Top === */}
+      <Navbar />
+
+      {/* === Centered Login Prompt === */}
+      <div className="flex items-center justify-center h-[calc(100vh-64px)] px-4">
         <div className="text-center">
-          <h1 className="text-2xl font-bold mb-4">Please Login to access DSA Practice</h1>
+          <h1 className="text-2xl font-bold mb-4">
+            Please Login to access DSA Practice
+          </h1>
           <Link
             to="/login"
             className="bg-purple-600 hover:bg-purple-700 text-white font-semibold px-4 py-2 rounded shadow"
@@ -174,10 +184,12 @@ export default function DsaPractice() {
           </Link>
         </div>
       </div>
-    );
-  }
+    </div>
+  );
+}
 
   return (
+       <div className="relative min-h-screen">
     <div className="bg-gray-50 min-h-screen">
       <Navbar />
       {showPopup &&!showPopup2&&(
@@ -284,8 +296,6 @@ export default function DsaPractice() {
     </div>
   </div>
 </div>
-
-
   </div>
 
   {/* Right Column: Calendar */}
@@ -294,7 +304,7 @@ export default function DsaPractice() {
       <p className="text-2xl font-bold">0 Days</p>
       <p className="text-sm">Start solving to begin your streak.</p>
     </div>
-    <CustomCalendar />
+    <CustomCalendar/>
   </div>
 </div>
       <div className="flex flex-col sm:flex-row">
@@ -316,60 +326,23 @@ export default function DsaPractice() {
             ))}
           </div>
         </aside>
-
-        <main className="flex-1 p-6">
-          <div className="flex justify-between items-center mb-4">
-            <h1 className="text-2xl font-bold">{selectedTopic}</h1>
-            <span className="text-sm text-gray-500">0/{filteredProblems.length}</span>
-          </div>
-
-          <div className="w-full h-2 bg-pink-100 rounded-full mb-6">
-            <div
-              className="h-full bg-pink-400 rounded-full"
-              style={{ width: `${(filteredProblems.length / problems.length) * 100}%` }}
-            ></div>
-          </div>
-
-          <div className="bg-white rounded-xl shadow overflow-hidden">
-            {filteredProblems.map((problem, index) => (
-              <div
-                key={index}
-                className="flex items-center justify-between border-b p-4 hover:bg-purple-100"
-              >
-                <div className="flex items-center gap-3">
-                  <input
-                    type="checkbox"
-                    checked={checkedMap[problem._id] || false}
-                    onChange={(e) => handleCheckboxClick(e, problem._id)}
-                    className="accent-purple-600"
-                  />
-                  <span className="text-xl sm:text-2xl">☆</span>
-                  <span
-                    onClick={() => window.open(problem.url, "_blank")}
-                    className="text-sm hover:text-orange-500 sm:text-base font-medium cursor-pointer"
-                  >
-                    {problem.title}
-                  </span>
-                </div>
-                <div className="flex items-center gap-3 text-sm">
-                  <span>⏱</span>
-                  <span className={`px-2 py-1 rounded-full border ${difficultyColors[problem.difficulty]}`}>
-                    {problem.difficulty}
-                  </span>
-                  <button className="text-purple-600 text-xl">＋</button>
-                  <button
-                    onClick={() => handleDeleteProblem(problem._id)}
-                    className="text-green-500 hover:text-red-700 text-sm"
-                    title="Delete permanently"
-                  >
-                    Delete
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-        </main>
+          <PageSegment setSelectedProblem={setSelectedProblem} filteredProblems={filteredProblems} selectedTopic={selectedTopic} checkedMap={checkedMap} handleCheckboxClick={handleCheckboxClick} handleDeleteProblem={handleDeleteProblem} setShowSecond={setShowSecond} difficultyColors={difficultyColors} />
       </div>
+    </div>
+    {showSecond && (
+        <div className="fixed inset-0 bg-black/30 backdrop-blur-sm flex justify-center items-center z-40">
+          <div className="relative bg-white rounded-xl shadow-lg p-5 w-3/4 max-w-2xl">
+            <ProblemNote selectedProblem={selectedProblem} />
+            {/* Close Button */}
+            <button
+              onClick={() => setShowSecond(false)}
+              className="absolute top-2 right-2 bg-red-600 text-white px-2 py-1 rounded hover:bg-red-700"
+            >
+              ✖
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

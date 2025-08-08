@@ -4,6 +4,12 @@ import jwt from 'jsonwebtoken';
 import  dotenv  from "dotenv";
 dotenv.config()
 
+const generateUsername = (base) => {
+  const clean = base.replace(/[^a-zA-Z]/g, "").toLowerCase() || "user";
+  const letters = clean.substring(0, Math.min(4, clean.length));
+  const numbers = Math.floor(Math.random() * 10000).toString().padStart(3, "0");
+  return `${letters}${numbers}`;
+};
 
 const userRegister = async (req, res) => {
     try {
@@ -14,6 +20,11 @@ const userRegister = async (req, res) => {
   if (!name || !username || !email || !password) {
     return res.status(400).json({ success:false,message: "All fields are required" });
   }
+
+   while (await User.exists({ username })) {
+      username = generateUsername(name);
+    }
+
 //Check username already exists
   const existingUsername = await User.findOne({ username });
   if (existingUsername) {               
@@ -41,8 +52,14 @@ const userRegister = async (req, res) => {
     await newUser.save();
     // Respond with success message
     res.status(201).json({success:true, message: "User registered successfully", user: { username, email } });
-} catch (error) {
-    console.error("Error registering user:", error);
+} catch (err) {
+      if (err.code === 11000 && err.keyPattern.username) {
+      // Retry on duplicate key error
+      const newUsername = generateUsername(req.body.name);
+      const user = new User({ ...req.body, username: newUsername });
+      await user.save();
+      return res.json({ success: true, username: newUsername });
+    }
     res.status(500).json({success:false, message: "Internal server error" });
   }
 
@@ -51,7 +68,7 @@ const userRegister = async (req, res) => {
 const userLogin = async (req, res) => {
     try {
         const {uniqueId, password } = req.body;
-       console.log("Login request received:", req.body);
+    
         // Validate input
         if (!uniqueId || !password) {
         return res.status(400).json({ success: false, message: "All fields are required" });
@@ -64,14 +81,14 @@ const userLogin = async (req, res) => {
               { email: uniqueId }
             ]
           });
-        console.log("User found:", user);
+   
         if (!user) {
         return res.status(400).json({ success: false, message: "User not found" });
         }
     
         // Check the password
         const isPasswordValid = await bcrypt.compare(password, user.password);
-        console.log("Password validation result:", isPasswordValid);
+       
         if (!isPasswordValid) {
         return res.status(400).json({ success: false, message: "Invalid password" });
         }
@@ -200,7 +217,15 @@ const userLogin = async (req, res) => {
           .json({ success: false, message: "Failed to update user" });
       }
     };
-    
-    
 
-export {userRegister, userLogin,userMe,userLogout,userUpdate};
+
+   const findUserName = async (req, res) => {
+  try {
+    const exists = await User.exists({ username: req.params.username.toLowerCase() });
+    res.json({ exists: !!exists });
+  } catch (err) {
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+export {userRegister, userLogin,userMe,userLogout,userUpdate, findUserName};
