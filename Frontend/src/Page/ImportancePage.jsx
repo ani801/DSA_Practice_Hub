@@ -10,7 +10,7 @@ export default function ImportancePage() {
       {/* === Hero Section === */}
       <section className="text-center py-20 px-6">
         <h1 className="text-4xl sm:text-5xl font-bold text-indigo-700 mb-4">
-          Welcome to CodeHub — Your CSE Companion 🚀
+          Welcome to PracticeHub — Your CSE Companion 🚀
         </h1>
         <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto">
           Practice DSA, Master Core Subjects, and Build Real Projects – All in One Place.
@@ -40,7 +40,7 @@ export default function ImportancePage() {
       {/* === Three Pillars Section === */}
       <section className="py-16 px-6 bg-white">
         <h2 className="text-3xl text-center font-bold mb-12 text-gray-800">What You Can Learn</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 max-w-6xl mx-auto">
           
           {/* DSA Practice */}
           <div className="bg-gradient-to-br from-purple-200 to-purple-100 rounded-lg p-6 shadow hover:shadow-lg transition">

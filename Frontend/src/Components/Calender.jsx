@@ -5,9 +5,9 @@ import { Url } from "../App";
 
 const CustomCalendar = () => {
   const today = dayjs();
-  const [currentDate, setCurrentDate] = useState(dayjs());
-  const [highlightedDates, setHighlightedDates] = useState([]);
-  const [currentYear, setCurrentYear] = useState(today.year());
+  const [currentDate,setCurrentDate] = useState(dayjs());
+  const [highlightedDates,setHighlightedDates] = useState([]);
+  const [currentYear,setCurrentYear] = useState(today.year());
 
   const daysOfWeek = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
@@ -26,7 +26,7 @@ const CustomCalendar = () => {
     };
 
     fetchYearlyPotdData();
-    console.log("Fetching POTD data for year:", currentYear);
+   
   }, [currentYear]);
 
   // Update year if currentDate changes to a different year

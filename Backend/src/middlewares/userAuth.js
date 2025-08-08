@@ -36,7 +36,7 @@ const userAuth = asyncHandler(async (req, res, next) => {
 //     }
 //     return res.status(200).json({success:true, user});
 //   } catch (error) {
-//     console.log("auth error",error)
+//   
 //     return res.status(401).json({success:false, message: "Not authorized, token failed" });
 //   }
 // });

@@ -24,12 +24,8 @@ const PracticeContextProvider = ({ children }) => {
 
   if (currusername) {
     setUsername(currusername);
-    console.log("Username:", currusername);
-
     const storedUser = localStorage.getItem(currusername);
     const parsedUser = storedUser ? JSON.parse(storedUser) : null;
-    console.log("Parsed User:", parsedUser);
-
     if (parsedUser) {
       setUser(parsedUser);
       setIsAuthenticated(true);
@@ -114,14 +110,14 @@ const PracticeContextProvider = ({ children }) => {
   useEffect(() => {
    if (user) fetchPOTD();
       if (isAuthenticated&&!localStorage.getItem("username")) fetchMe(); // Avoid refetching if user already in localStorage
-  }, []);
+  }, [potdProblem,user]);
 
   // Fetch problems after authentication or external trigger
   useEffect(() => {
     if (isAuthenticated) {
       if (user) fetchProblems();
     }
-  }, [isAuthenticated, trigger]);
+  }, [isAuthenticated,user]);
 
   // Extract unique topics from problems
   useEffect(() => {
@@ -131,7 +127,10 @@ const PracticeContextProvider = ({ children }) => {
     });
     setTopics(Array.from(topicSet));
   }, [problems]);
+    
 
+  // Handle form data for profile updates
+  
   // Memoized context value
   const contextValue = useMemo(() => ({
     problems,
@@ -147,7 +146,7 @@ const PracticeContextProvider = ({ children }) => {
     potdProblem,
     user,
     setUser,
-    
+    fetchMe,
   }), [
     problems,
     topics,
@@ -156,6 +155,7 @@ const PracticeContextProvider = ({ children }) => {
     trigger,
     potdProblem,
     user,
+   
   ]);
 
   return (
@@ -165,4 +165,4 @@ const PracticeContextProvider = ({ children }) => {
   );
 };
 
-export { PracticeContextProvider };
+export { PracticeContextProvider }

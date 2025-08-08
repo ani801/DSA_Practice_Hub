@@ -115,8 +115,6 @@ const addPotd = expressAsyncHandler(async (req, res) => {
       await potdMonthDoc.save();
     }
 
-    
-    console.log("User found:", user);
 const alreadyLinked = user.potdref.some(
   (ref) => ref?.year_ref?.toString() === potdMonthDoc._id.toString()
 );

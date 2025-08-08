@@ -7,6 +7,7 @@ import cookieParser from "cookie-parser";
 import dsaRouter from "./src/routes/dsaRouter.js";
 import potdRouter from "./src/routes/potdRouter.js";
 import { userAuth } from "./src/middlewares/userAuth.js";
+import authRouter from "./src/routes/authRouter.js";
 
 const app = express();
 dotenv.config();
@@ -30,6 +31,7 @@ app.get("/", (req, res) => {
 app.use("/api/user", userRouter);
 app.use("/api/dsa",userAuth,dsaRouter);
 app.use("/api/potd", userAuth, potdRouter);
+app.use("/api/auth", authRouter);
 
 
 const PORT = process.env.PORT || 4000;

@@ -6,9 +6,12 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
         unique: true,
+        index: true,
     },
     name: {
         type: String,
+        required: true,
+        trim: true,
     },
     email: {
         type: String,
@@ -60,8 +63,14 @@ problems:[
         type: String,
         default: "Not Specified",
     },
-
-
+    otpCode: {
+        type: String,
+        default: undefined,
+    },
+    otpExpires: {
+        type: Date,
+        default: undefined,
+    },  
     timeStamp: {
         type: Date,
         default: Date.now,

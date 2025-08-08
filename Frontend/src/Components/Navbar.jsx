@@ -7,11 +7,13 @@ import PracticeContext from "../context/PracticeContext";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { Url } from "../App";
-import { useNavigate } from "react-router-dom";
+import { useNavigate,useLocation } from "react-router-dom";
+
 
 
 export default function Navbar() {
   const navigate = useNavigate();
+  const location = useLocation();
   // State to manage menu and dropdown visibility
   const{ setIsAuthenticated, username ,isAuthenticated} = useContext(PracticeContext);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -52,12 +54,41 @@ const handleProfileClick = () => {
       </div>
 
       <nav className={`flex flex-col md:flex-row md:space-x-6 mt-4 md:mt-0 text-gray-700 font-medium ${menuOpen ? 'block' : 'hidden'} md:flex`}>
-        <Link to="/" className="hover:text-purple-600 px-2 py-1">Home</Link>
-        <Link to="/importance" className="hover:text-purple-600 px-2 py-1">Importance</Link>
-        <Link to="/dsa-practice" className="hover:text-purple-600 px-2 py-1">DSA</Link>
-        {/* <a href="#development" className="hover:text-purple-600 px-2 py-1">Development</a> */}
-        <a href="#core" className="hover:text-purple-600 px-2 py-1">Core Subjects</a>
-      </nav>
+  <Link
+    to="/"
+    className={`hover:text-purple-600 px-2 py-1 ${
+      location.pathname === '/' ? 'text-purple-600 font-semibold border-b-2 border-purple-600' : ''
+    }`}
+  >
+    Home
+  </Link>
+
+  <Link
+    to="/importance"
+    className={`hover:text-purple-600 px-2 py-1 ${
+      location.pathname === '/importance' ? 'text-purple-600 font-semibold border-b-2 border-purple-600' : ''
+    }`}
+  >
+    Importance
+  </Link>
+
+  <Link
+    to="/dsa-practice"
+    className={`hover:text-purple-600 px-2 py-1 ${
+      location.pathname === '/dsa-practice' ? 'text-purple-600 font-semibold border-b-2 border-purple-600' : ''
+    }`}
+  >
+    DSA
+  </Link>
+
+  <a
+    href="#core"
+    className="hover:text-purple-600 px-2 py-1"
+  >
+    Core Subjects
+  </a>
+</nav>
+
 
       <div className="relative mt-4 md:mt-0 text-sm md:text-base">
         {!isAuthenticated ? (
