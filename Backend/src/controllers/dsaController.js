@@ -91,7 +91,7 @@ const updateDsaProblemNote = asyncHandler(async (req, res) => {
         const problem = await DsaProblem.findById(id);
         if (!problem) {
             return res.status(404).json({ success: false, message: "Problem not found" });
-            console.error("Problem not found:", id);
+            
         }
         problem.note = note; // Update the note
         await problem.save();

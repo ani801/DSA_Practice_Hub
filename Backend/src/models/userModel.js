@@ -32,17 +32,16 @@ const userSchema = new mongoose.Schema({
             ref: "PotdMonth",
             required: true,
         }
-}],
+             }],
 problems:[
     {
         type: mongoose.Schema.Types.ObjectId,
         ref: "DsaProblem",      
     }
-],
+         ],
     institution: {
         type: String,
-        default: "Not Specified",
-    },
+        default: "Not Specified",    },
    instagrm: {
         type: String,
         default: "Not Specified",

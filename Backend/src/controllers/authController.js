@@ -23,8 +23,9 @@ const requestOtp = async (req, res) => {
   `;
 
   try {
-    await sendEmail(user.email, "🔐 Your OTP for Password Reset", html);
-    res.json({ success: true, message: "OTP sent to your email" });
+    const emailSent = await sendEmail(user.email, "🔐 Your OTP for Password Reset", html);
+    if (emailSent) res.json({ success: true, message: "OTP sent to your email" });
+    else res.status(500).json({ success: false, message: "Failed to send OTP" });
   } catch (err) {
     console.log(err);
     res.status(500).json({ success: false, message: "Failed to send OTP" });
