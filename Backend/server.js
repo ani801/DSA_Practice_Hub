@@ -17,10 +17,14 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 app.use(cors({
-    origin: "http://localhost:5173", // Update with your frontend URL
-    credentials: true, 
+    origin: "https://dsa-practice-hub-frontend-0i71.onrender.com",
+    credentials: true,
   }));
-  
+
+app.get("/", (req, res) => {
+  res.send("API is running...");
+});
+
 // Generate CSRF token middleware
 app.use("/api/user", userRouter);
 app.use("/api/dsa",userAuth,dsaRouter);

@@ -27,14 +27,13 @@ const dsaProblem = new mongoose.Schema(
         type: String,
         default: null,
         },
-        note:
-        {
+        note: {
         type: String,
         default: "",
         },
         timeStamp: {
         type: Date,
-        default: Date.now,  
+        default: Date.now,
         },
     }
 )
