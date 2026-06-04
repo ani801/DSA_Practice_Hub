@@ -10,7 +10,7 @@ const sendEmail = async (to, subject, html) => {
     },
   });
 
-  await transporter.sendMail({
+  return await transporter.sendMail({
     from: `"DSA Practice Hub" <${process.env.EMAIL_USER}>`,
     to,
     subject,
