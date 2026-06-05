@@ -15,7 +15,7 @@ export default function Navbar() {
   const navigate = useNavigate();
   const location = useLocation();
   // State to manage menu and dropdown visibility
-  const{ setIsAuthenticated, username ,isAuthenticated} = useContext(PracticeContext);
+  const { setIsAuthenticated, setUser, setProblems, setUsername, username, isAuthenticated } = useContext(PracticeContext);
   const [menuOpen, setMenuOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
@@ -23,12 +23,14 @@ export default function Navbar() {
     try {
      const response = await axios.get(`${Url}/api/user/logout`, { withCredentials: true });
      if (response.data.success) {
-      setIsAuthenticated(false);
-      setDropdownOpen(false);
-      navigate("/");
-      // Clear user data from localStorage
       localStorage.removeItem(localStorage.getItem("username"));
       localStorage.removeItem("username");
+      setIsAuthenticated(false);
+      setUser(null);
+      setProblems([]);
+      setUsername("");
+      setDropdownOpen(false);
+      navigate("/");
       toast.success("Logged out successfully!");
     }
   } catch (error) {

@@ -49,12 +49,14 @@ function VerifyOtp({ email, onSuccess }) {
 
   const handleResendOtp = async () => {
     try {
-      await axios.post("/api/auth/resend-otp", { email });
+      await axios.post(`${Url}/api/auth/resend-otp`, { email });
       toast.success("OTP resent");
-      setSecondsLeft(countdownSeconds);
+      setSecondsLeft(299);
       setResendEnabled(false);
     } catch (err) {
       toast.error("Failed to resend OTP");
+      setSecondsLeft(299);
+      setResendEnabled(false);
     }
   };
 
