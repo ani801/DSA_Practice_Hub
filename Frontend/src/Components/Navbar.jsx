@@ -15,7 +15,7 @@ export default function Navbar() {
   const navigate = useNavigate();
   const location = useLocation();
   // State to manage menu and dropdown visibility
-  const{ setIsAuthenticated, username ,isAuthenticated} = useContext(PracticeContext);
+  const { setIsAuthenticated, setUser, setProblems, setUsername, username, isAuthenticated } = useContext(PracticeContext);
   const [menuOpen, setMenuOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
@@ -23,12 +23,14 @@ export default function Navbar() {
     try {
      const response = await axios.get(`${Url}/api/user/logout`, { withCredentials: true });
      if (response.data.success) {
-      setIsAuthenticated(false);
-      setDropdownOpen(false);
-      navigate("/");
-      // Clear user data from localStorage
       localStorage.removeItem(localStorage.getItem("username"));
       localStorage.removeItem("username");
+      setIsAuthenticated(false);
+      setUser(null);
+      setProblems([]);
+      setUsername("");
+      setDropdownOpen(false);
+      navigate("/");
       toast.success("Logged out successfully!");
     }
   } catch (error) {
@@ -93,11 +95,11 @@ const handleProfileClick = () => {
       <div className="relative mt-4 md:mt-0 text-sm md:text-base">
         {!isAuthenticated ? (
           <div className="flex space-x-4 items-center">
-            <Link to="/login" onClick={() => setIsAuthenticated(true)} className="flex items-center space-x-1 text-purple-600 hover:text-purple-800">
+            <Link to="/login" className="flex items-center space-x-1 text-purple-600 hover:text-purple-800">
               <FaSignInAlt />
               <span>Login</span>
             </Link>
-            <Link to="/register" onClick={() => setIsAuthenticated(true)} className="flex items-center space-x-1 text-purple-600 hover:text-purple-800">
+            <Link to="/register" className="flex items-center space-x-1 text-purple-600 hover:text-purple-800">
               <FaUserPlus />
               <span>Register</span>
             </Link>

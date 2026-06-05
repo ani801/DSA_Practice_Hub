@@ -44,9 +44,11 @@ export default function AddProblem() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    const trimmed = value.trim();
 
     if (name === "url") {
+      const trimmed = value.trim();
+      // Always update the field so the controlled input never gets stuck
+      setForm(prev => ({ ...prev, url: value }));
       if (uniqueUrls.has(trimmed)) {
         toast.error("This URL already exists in the problems list!");
         return;
@@ -55,9 +57,11 @@ export default function AddProblem() {
       if (title !== "Invalid URL") {
         setForm(prev => ({ ...prev, title }));
       }
+      return;
     }
 
-    setForm(prev => ({ ...prev, [name]: trimmed }));
+    // Don't trim on every keystroke — breaks typing multi-word titles mid-word
+    setForm(prev => ({ ...prev, [name]: value }));
   };
 
   const handleSuggestionClick = (selected) => {
@@ -67,7 +71,10 @@ export default function AddProblem() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const { url, title, difficulty, tags } = form;
+    const url = form.url.trim();
+    const title = form.title.trim();
+    const { difficulty } = form;
+    const tags = form.tags.trim();
 
     if (!url || !title || !difficulty || !tags) {
       toast.error("Please fill in all fields!");
