@@ -15,11 +15,11 @@ import PracticeContext from "../context/PracticeContext";
 import Navbar from "../Components/Navbar";
 
 export default function ProfilePage() {
-  const { user, setUser } = useContext(PracticeContext);
+  const { user} = useContext(PracticeContext);
   const navigate = useNavigate();
 
   const [initialData, setInitialData] = useState({});
-  const [formData, setFormData] = useState({});
+   const [formData, setFormData] = useState({});
   const [editMode, setEditMode] = useState({
     name: false,
     username: false,
@@ -32,10 +32,11 @@ export default function ProfilePage() {
     x: false,
   });
 
+
   // Redirect if user is not logged in
   useEffect(() => {
     if (!user) {
-      console.log("user", user);
+     
       toast.info("Please login to access your profile");
       const timeout = setTimeout(() => navigate("/"), 1000);
       return () => clearTimeout(timeout);
@@ -58,38 +59,42 @@ export default function ProfilePage() {
 
   const isChanged = JSON.stringify(formData) !== JSON.stringify(initialData);
 
-  const handleSave = async () => {
-    try {
-      const response = await axios.put(`${Url}/api/user/update`, formData, {
-        withCredentials: true,
-      });
-      if (response.data.success) {
-        toast.success("Profile updated successfully!");
-        setEditMode({});
-        setUser(response.data.user);
-        localStorage.setItem("username", response.data.user.username);
-        localStorage.setItem(response.data.user.username, JSON.stringify(response.data.user));
-        const updatedData = {
-          name: response.data.user.name || "",
-          username: response.data.user.username || "",
-          email: response.data.user.email || "",
-          institution: response.data.user.institution || "",
-          linkedin: response.data.user.linkedin || "",
-          github: response.data.user.github || "",
-          instagrm: response.data.user.instagrm || "",
-          facebook: response.data.user.facebook || "",
-          x: response.data.user.x || "",
-        };
-        setInitialData(updatedData);
-        setFormData(updatedData);
-      } else {
-        toast.error(response.data.message);
+
+
+  
+    const handleSave = async () => {
+      try {
+        const response = await axios.put(`${Url}/api/user/update`, formData, {
+          withCredentials: true,
+        });
+        if (response.data.success) {
+          toast.success("Profile updated successfully!");
+          setEditMode({});
+          setUser(response.data.user);
+          localStorage.setItem("username", response.data.user.username);
+          localStorage.setItem(response.data.user.username, JSON.stringify(response.data.user));
+          const updatedData = {
+            name: response.data.user.name || "",
+            username: response.data.user.username || "",
+            email: response.data.user.email || "",
+            institution: response.data.user.institution || "",
+            linkedin: response.data.user.linkedin || "",
+            github: response.data.user.github || "",
+            instagrm: response.data.user.instagrm || "",
+            facebook: response.data.user.facebook || "",
+            x: response.data.user.x || "",
+          };
+          setInitialData(updatedData);
+          setFormData(updatedData);
+        } else {
+          toast.error(response.data.message);
+        }
+      } catch (error) {
+        console.error("Error updating profile:", error);
+        toast.error("Failed to update profile");
       }
-    } catch (error) {
-      console.error("Error updating profile:", error);
-      toast.error("Failed to update profile");
-    }
-  };
+    };
+
 
   const renderField = (Icon, key) => (
     <div className="mb-4">
