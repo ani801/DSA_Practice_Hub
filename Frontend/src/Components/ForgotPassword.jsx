@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { FiMail } from "react-icons/fi"; // email icon
-import { FaSpinner } from "react-icons/fa"; // spinner icon
+import { Link } from "react-router-dom";
+import { FiMail } from "react-icons/fi";
+import { FaSpinner } from "react-icons/fa";
 import { Url } from "../App";
 
 
@@ -74,9 +75,9 @@ function ForgotPassword({ onSuccess }) {
 
         <div className="mt-4 text-center text-sm text-gray-500">
           Remember your password?{" "}
-          <a href="/login" className="text-purple-600 hover:underline">
+          <Link to="/login" className="text-purple-600 hover:underline">
             Go back to login
-          </a>
+          </Link>
         </div>
       </div>
     </div>
