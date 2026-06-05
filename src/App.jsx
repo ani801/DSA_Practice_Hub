@@ -12,7 +12,9 @@ import ImportancePage from './Page/ImportancePage';
 import ProfilePage from './Page/ProfilePage';
 import ProblemNote from './Components/ProblemNote';
 import AddProblemGuide from './Page/AddProblemGuide';
-export const Url = import.meta.env.VITE_API_URL;
+const _apiUrl = import.meta.env.VITE_API_URL;
+if (!_apiUrl) console.error("VITE_API_URL is not set — all API calls will fail. Add it to your .env file.");
+export const Url = _apiUrl || "";
 function App() {
 
 
