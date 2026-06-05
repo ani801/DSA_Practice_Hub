@@ -18,7 +18,7 @@ const difficultyColors = {
 };
 
 export default function DsaPractice() {
-  const { problems, topics, isAuthenticated, setTrigger, potdProblem } = useContext(PracticeContext);
+  const { problems, topics, isAuthenticated, setTrigger, potdProblem, username } = useContext(PracticeContext);
   const [selectedTopic, setSelectedTopic] = useState("All Topics");
   // console.log("problems ",problems);
   // const todayStr = new Date().toISOString().slice(0, 10);
@@ -33,6 +33,11 @@ export default function DsaPractice() {
   );
 
   const [checkedMap, setCheckedMap] = useState({});
+
+  // Reset checked state when the logged-in user changes (logout / different user login)
+  useEffect(() => {
+    setCheckedMap({});
+  }, [username]);
   const [pendingCheck, setPendingCheck] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
   const [showPopup2, setShowPopup2] = useState(false);
@@ -326,7 +331,7 @@ if (!isAuthenticated) {
             ))}
           </div>
         </aside>
-          <PageSegment setSelectedProblem={setSelectedProblem} filteredProblems={filteredProblems} selectedTopic={selectedTopic} checkedMap={checkedMap} handleCheckboxClick={handleCheckboxClick} handleDeleteProblem={handleDeleteProblem} setShowSecond={setShowSecond} difficultyColors={difficultyColors} />
+          <PageSegment setSelectedProblem={setSelectedProblem} filteredProblems={filteredProblems} problems={problems} selectedTopic={selectedTopic} checkedMap={checkedMap} handleCheckboxClick={handleCheckboxClick} handleDeleteProblem={handleDeleteProblem} setShowSecond={setShowSecond} difficultyColors={difficultyColors} />
       </div>
     </div>
     {showSecond && (

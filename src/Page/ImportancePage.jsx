@@ -90,7 +90,7 @@ export default function ImportancePage() {
         <h3 className="text-xl font-semibold mb-2">Ready to Level Up Your CSE Journey?</h3>
         <p className="text-sm mb-4">Start practicing, learning, and building today.</p>
         <Link
-          to="/register "
+          to="/register"
           className="inline-block bg-white text-indigo-700 font-semibold px-6 py-2 rounded hover:bg-gray-100 transition"
         >
           Start Now →

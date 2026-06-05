@@ -48,6 +48,12 @@ function ProblemNote({ selectedProblem }) {
 
   const isModified = note !== originalNote;
 
+  if (!selectedProblem) return (
+    <div className="p-8 text-center text-gray-500">
+      No problem selected. Please open a note from the DSA Practice page.
+    </div>
+  );
+
   if (loading) return <div className="p-4 text-gray-600">Loading note...</div>;
 
   return (

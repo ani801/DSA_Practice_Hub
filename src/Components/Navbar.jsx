@@ -95,11 +95,11 @@ const handleProfileClick = () => {
       <div className="relative mt-4 md:mt-0 text-sm md:text-base">
         {!isAuthenticated ? (
           <div className="flex space-x-4 items-center">
-            <Link to="/login" onClick={() => setIsAuthenticated(true)} className="flex items-center space-x-1 text-purple-600 hover:text-purple-800">
+            <Link to="/login" className="flex items-center space-x-1 text-purple-600 hover:text-purple-800">
               <FaSignInAlt />
               <span>Login</span>
             </Link>
-            <Link to="/register" onClick={() => setIsAuthenticated(true)} className="flex items-center space-x-1 text-purple-600 hover:text-purple-800">
+            <Link to="/register" className="flex items-center space-x-1 text-purple-600 hover:text-purple-800">
               <FaUserPlus />
               <span>Register</span>
             </Link>
