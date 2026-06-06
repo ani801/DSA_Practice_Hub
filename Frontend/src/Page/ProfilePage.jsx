@@ -15,7 +15,7 @@ import PracticeContext from "../context/PracticeContext";
 import Navbar from "../Components/Navbar";
 
 export default function ProfilePage() {
-  const { user} = useContext(PracticeContext);
+  const { user, setUser } = useContext(PracticeContext);
   const navigate = useNavigate();
 
   const [initialData, setInitialData] = useState({});
@@ -71,8 +71,13 @@ export default function ProfilePage() {
           toast.success("Profile updated successfully!");
           setEditMode({});
           setUser(response.data.user);
+          const oldUsername = localStorage.getItem("username");
           localStorage.setItem("username", response.data.user.username);
           localStorage.setItem(response.data.user.username, JSON.stringify(response.data.user));
+          // Remove stale entry if username changed
+          if (oldUsername && oldUsername !== response.data.user.username) {
+            localStorage.removeItem(oldUsername);
+          }
           const updatedData = {
             name: response.data.user.name || "",
             username: response.data.user.username || "",

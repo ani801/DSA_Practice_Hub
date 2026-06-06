@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Url } from "../App";
 import axios from "axios";
@@ -37,21 +37,42 @@ export default function Register() {
   });
 
   const navigate = useNavigate();
+  const [nameDraft, setNameDraft] = useState("");
+  const [isGeneratingUsername, setIsGeneratingUsername] = useState(false);
+  const generationRef = useRef(0); // tracks which generation run is current
 
-  // ✅ Generate and assign username internally when name changes
-  const handleChange = async (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-
-    if (name === "name" && value.trim() !== "") {
+  // Debounced username generation — runs 500ms after the user stops typing the name
+  useEffect(() => {
+    if (!nameDraft.trim()) {
+      ++generationRef.current; // cancel any in-flight generation
+      setIsGeneratingUsername(false);
+      return;
+    }
+    const runId = ++generationRef.current;
+    setIsGeneratingUsername(true);
+    const timer = setTimeout(async () => {
       let candidate, isAvailable = false, attempts = 0;
       while (!isAvailable && attempts < 10) {
-        candidate = generateUsername(value);
+        candidate = generateUsername(nameDraft);
         isAvailable = await checkUsernameAvailable(candidate);
         attempts++;
       }
+      // Ignore result if a newer generation has started
+      if (runId !== generationRef.current) return;
+      setIsGeneratingUsername(false);
+      if (!isAvailable) {
+        toast.error("Could not generate a unique username. Please try again.");
+        return;
+      }
       setFormData((prev) => ({ ...prev, username: candidate }));
-    }
+    }, 500);
+    return () => clearTimeout(timer);
+  }, [nameDraft]);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    if (name === "name") setNameDraft(value);
   };
 
   // ✅ Handle Registration
@@ -59,6 +80,10 @@ export default function Register() {
     e.preventDefault();
     const { name, username, email, password, confirmPassword } = formData;
 
+    if (isGeneratingUsername) {
+      toast.info("Username is being generated, please wait a moment.");
+      return;
+    }
     if (!name || !username || !email || !password || !confirmPassword) {
       toast.error("Please fill in all fields!");
       return;
@@ -146,9 +171,14 @@ export default function Register() {
 
           <button
             type="submit"
-            className="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2 rounded-lg transition"
+            disabled={isGeneratingUsername}
+            className={`w-full text-white font-semibold py-2 rounded-lg transition ${
+              isGeneratingUsername
+                ? "bg-purple-300 cursor-not-allowed"
+                : "bg-purple-600 hover:bg-purple-700"
+            }`}
           >
-            Register
+            {isGeneratingUsername ? "Setting up username…" : "Register"}
           </button>
         </form>
 
