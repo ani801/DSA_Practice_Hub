@@ -55,6 +55,8 @@ function VerifyOtp({ email, onSuccess }) {
       setResendEnabled(false);
     } catch (err) {
       toast.error("Failed to resend OTP");
+      setSecondsLeft(299);
+      setResendEnabled(false);
     }
   };
 

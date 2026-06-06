@@ -47,12 +47,12 @@ export default function AddProblem() {
 
     if (name === "url") {
       const trimmed = value.trim();
+      // Always update the field so the controlled input never gets stuck
+      setForm(prev => ({ ...prev, url: value }));
       if (uniqueUrls.has(trimmed)) {
         toast.error("This URL already exists in the problems list!");
         return;
       }
-      // Update field only after passing the duplicate check
-      setForm(prev => ({ ...prev, url: value }));
       const title = extractProblemName(trimmed);
       if (title !== "Invalid URL") {
         setForm(prev => ({ ...prev, title }));
