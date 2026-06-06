@@ -31,7 +31,7 @@ const PracticeContextProvider = ({ children }) => {
       setIsAuthenticated(true);
     }
   } 
-}, [username]);
+}, []);
 
 
 
@@ -47,10 +47,11 @@ const PracticeContextProvider = ({ children }) => {
         localStorage.setItem(response.data.user.username, JSON.stringify(response.data.user));
         setIsAuthenticated(true);
       } else {
+        const storedUsername = localStorage.getItem("username");
         setUser(null);
         setIsAuthenticated(false);
         localStorage.removeItem("username");
-        localStorage.removeItem(response.data.user.username);
+        if (storedUsername) localStorage.removeItem(storedUsername);
       }
     } catch (error) {
       setUser(null); // Logout on failure
@@ -106,18 +107,21 @@ const PracticeContextProvider = ({ children }) => {
     }
   };
 
-  // Initial fetch on mount
+  // On mount: try to restore session from cookie if no local user data
   useEffect(() => {
-   if (user) fetchPOTD();
-      if (isAuthenticated&&!localStorage.getItem("username")) fetchMe(); // Avoid refetching if user already in localStorage
-  }, [potdProblem,user]);
+    if (!user) fetchMe();
+  }, []);
 
-  // Fetch problems after authentication or external trigger
+  // Fetch POTD once when the user becomes authenticated
   useEffect(() => {
-    if (isAuthenticated) {
-      if (user) fetchProblems();
-    }
-  }, [isAuthenticated,user]);
+    if (isAuthenticated) fetchPOTD();
+  }, [isAuthenticated]);
+
+  // Fetch problems on auth change, explicit trigger, or when user first becomes available
+  const hasUser = !!user;
+  useEffect(() => {
+    if (isAuthenticated && user) fetchProblems();
+  }, [isAuthenticated, trigger, hasUser]);
 
   // Extract unique topics from problems
   useEffect(() => {
